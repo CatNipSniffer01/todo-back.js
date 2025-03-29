@@ -1,0 +1,46 @@
+-- SQL Dump for To-Do Application Backend (Plural Table Names)
+
+CREATE DATABASE IF NOT EXISTS todo_app;
+USE todo_app;
+
+DROP TABLE IF EXISTS `Tasks`;
+DROP TABLE IF EXISTS `TaskLists`;
+DROP TABLE IF EXISTS `Users`;
+
+CREATE TABLE `Users` (
+  `user_Id` INT AUTO_INCREMENT PRIMARY KEY,
+  `userName` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `acc_CR_D` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `acc_UP_D` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `isAdmin` BOOLEAN DEFAULT FALSE
+) ENGINE=InnoDB;
+
+CREATE TABLE `TaskLists` (
+  `list_Id` INT AUTO_INCREMENT PRIMARY KEY,
+  `list_Title` VARCHAR(255) NOT NULL,
+  `list_Description` VARCHAR(255),
+  `creation_Date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `update_Date` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `color` VARCHAR(7) DEFAULT '#ffffff',
+  `owner_Id` INT,
+  CONSTRAINT fk_tasklist_user FOREIGN KEY (`owner_Id`)
+      REFERENCES `Users`(`user_Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE `Tasks` (
+  `task_Id` INT AUTO_INCREMENT PRIMARY KEY,
+  `taskList_Id` INT NOT NULL,
+  `task_Title` VARCHAR(255) NOT NULL,
+  `task_Description` TEXT,
+  `task_Status` BOOLEAN DEFAULT FALSE,
+  `task_Priority` ENUM('high', 'medium', 'low') DEFAULT 'low',
+  `due_Date` DATETIME,
+  `creation_Date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `update_Date` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `color` VARCHAR(7) DEFAULT '#ffffff',
+  `owner_Id` INT,
+  CONSTRAINT fk_task_tasklist FOREIGN KEY (`taskList_Id`)
+      REFERENCES `TaskLists`(`list_Id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
