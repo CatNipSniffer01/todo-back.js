@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         user_Id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         userName: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },
+        isVerified: {type: DataTypes.BOOLEAN, defaultValue: false},
         email: { type: DataTypes.STRING, allowNull: false, unique: true },
         acc_CR_D: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
         acc_UP_D: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
